@@ -16,10 +16,10 @@ url.oninput = function() {
 		let original = Services.io.newURI(url.value, null, null);
 		title.value = PlacesUtils.history.getPageTitle(original) || url.value;
 	}
-	acceptButton.disabled = !url.value || !folder.view._selection.count;
+	acceptButton.disabled = !url.value || !folder.selectedNode;
 };
 folder.onselect = function() {
-	acceptButton.disabled = !url.value || !folder.view._selection.count;
+	acceptButton.disabled = !url.value || !folder.selectedNode;
 };
 
 for (let entry of OpenWithCore.list) {
@@ -46,6 +46,7 @@ function dialogAccept() {
 
 		let nbs = Cc['@mozilla.org/browser/nav-bookmarks-service;1'].getService(Ci.nsINavBookmarksService);
 		nbs.insertBookmark(folderID, uri, -1, title.value);
+	} else {
+		return false;
 	}
-	return false;
 }

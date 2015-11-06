@@ -123,6 +123,11 @@ let loggingObserver = {
 loggingObserver.observe();
 OpenWithCore.prefs.addObserver('log.enabled', loggingObserver, true);
 
+/* exported openBookmarkDialog */
+function openBookmarkDialog() {
+	openDialog('chrome://openwith/content/bookmark.xul', 'ow-bookmark', 'centerscreen');
+}
+
 let list = $('list');
 loadBrowserList();
 
@@ -296,7 +301,7 @@ function editKeyInfo(item) {
 	returnValues.promptText =
 			OpenWithCore.strings.formatStringFromName('keyinfoPromptText', [item.getAttribute('name')], 1);
 	returnValues.existingKeys = existingKeys;
-	openDialog('chrome://openwith/content/keyinfo.xul', 'keyinfo', 'centerscreen,modal', returnValues);
+	openDialog('chrome://openwith/content/keyinfo.xul', 'ow-keyinfo', 'centerscreen,modal', returnValues);
 	if (returnValues.removeKeyInfo === true) {
 		item.removeAttribute('keyInfo');
 		item.removeAttribute('keyInfoHuman');
