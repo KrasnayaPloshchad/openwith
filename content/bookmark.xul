@@ -22,6 +22,10 @@
 					enablehistory="true" showcommentcolumn="true" />
 			</row>
 			<row align="center">
+				<label value="Title:" />
+				<textbox id="title" />
+			</row>
+			<row align="center">
 				<label value="Open with:" />
 				<menulist id="browser">
 					<menupopup />

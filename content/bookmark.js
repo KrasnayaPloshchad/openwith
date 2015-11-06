@@ -1,15 +1,24 @@
 /* globals Components, PlacesUtils, PlacesUIUtils, Services, OpenWithCore */
-Components.utils.import('resource://gre/modules/Services.jsm');
-Components.utils.import('resource://openwith/openwith.jsm');
+var { classes: Cc, interfaces: Ci, utils: Cu } = Components;
+Cu.import('resource://gre/modules/Services.jsm');
+Cu.import('resource://openwith/openwith.jsm');
 
 let acceptButton = document.documentElement.getButton('accept');
 acceptButton.disabled = true;
 
 let url = document.getElementById('url');
+let title = document.getElementById('title');
 let browser = document.getElementById('browser');
 let folder = document.getElementById('folder');
 
-url.oninput = folder.onselect = function() {
+url.oninput = function() {
+	if (url.value) {
+		let original = Services.io.newURI(url.value, null, null);
+		title.value = PlacesUtils.history.getPageTitle(original) || url.value;
+	}
+	acceptButton.disabled = !url.value || !folder.view._selection.count;
+};
+folder.onselect = function() {
 	acceptButton.disabled = !url.value || !folder.view._selection.count;
 };
 
@@ -31,15 +40,12 @@ window.onload = function() {
 
 /* exported dialogAccept */
 function dialogAccept() {
-	let view = folder.view;
-	let selection = view._selection;
-	if (url.value && selection.count) {
-		let original = Services.io.newURI(url.value, null, null);
-		let title = PlacesUtils.history.getPageTitle(original);
+	if (url.value && folder.selectedNode) {
+		let folderID = PlacesUtils.getConcreteItemId(folder.selectedNode);
 		let uri = Services.io.newURI('openwith:' + browser.value + ':' + url.value, null, null);
-		console.log(view._rows[selection.currentIndex].itemId, uri.spec, -1, title);
-		// let nbs = Cc['@mozilla.org/browser/nav-bookmarks-service;1'].getService(Ci.nsINavBookmarksService)
-		// nbs.insertBookmark(view._rows[selection.currentIndex].itemId, uri.spec, -1, title);
+
+		let nbs = Cc['@mozilla.org/browser/nav-bookmarks-service;1'].getService(Ci.nsINavBookmarksService);
+		nbs.insertBookmark(folderID, uri, -1, title.value);
 	}
 	return false;
 }
