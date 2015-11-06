@@ -63,3 +63,10 @@
 <!ENTITY openwith-nomodifier "Select at least one modifier.">
 <!ENTITY openwith-comboinuse "This key combination appears to be in use.">
 <!ENTITY openwith-removecombo "Remove Shortcut">
+
+<!-- These strings appear in the bookmark creation dialog. -->
+<!ENTITY openwith-url.label "URL:">
+<!ENTITY openwith-url.placeholder "Type or select a URL">
+<!ENTITY openwith-title.label "Title:">
+<!ENTITY openwith-browser.label "Open with:">
+<!ENTITY openwith-folder.label "Folder:">
